@@ -1,61 +1,24 @@
-# Aso-Caldera_Area_proportion
-The script was made to categorized the area proportion/distribution in terms of the direction facing.
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
+**Aso Caldera Slope Stability and Susceptibility Mapping**
+This project visualizes areas of potential landslide vulnerability within the Aso Caldera in Japan, a region known for its complex geological history and seismic activity. Using a Digital Elevation Model (DEM), this analysis identifies slopes with a high susceptibility to disturbance from external triggers like seismic events or heavy rainfall.
 
-# Full data
-aspect_labels_full = [
-    "Flat (-1)", "North (0-22.5)", "Northeast (22.5-67.5)", "East (67.5-112.5)",
-    "Southeast (112.5-157.5)", "South (157.5-202.5)", "Southwest (202.5-247.5)",
-    "West (247.5-292.5)", "Northwest (292.5-337.5)", "North (337.5-360)"
-]
-fr_values_full = [1.269138, 7.078141, 11.277535, 9.744151, 11.382517, 13.124825, 13.656895, 12.384176, 13.444506, 6.638117]
+**Project Overview**
+The Aso Caldera is a geologically active area, and understanding its slope stability is crucial for risk assessment and disaster preparedness. This project focuses on identifying "susceptible areas"—zones where a combination of steep slopes and geological conditions make them more prone to failure.
 
-# Select main directions only for axis labels and legend
-main_dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
-main_indices = [1, 2, 3, 4, 5, 6, 7, 8]  # indices for above from full list
+The core of this work is a slope analysis, which processes the DEM to quantify the steepness of the terrain. The results highlight areas with larger potential slope ranges, which are more likely to be affected by triggering events. These areas are not currently experiencing landslides, but are considered highly vulnerable.
 
-# Corresponding FR values and colors for main directions
-fr_values = [fr_values_full[i] for i in main_indices]
+**Methodology**
+The visualization was created using the following steps:
 
-# Color ramp (yellow to blue)
-colors = ["#FFD700", "#ADFF2F", "#00FFCC", "#1E90FF", "#000080"]
-cmap = LinearSegmentedColormap.from_list("aspect_cmap", colors, N=len(main_dirs))
-aspect_colors = [cmap(i/(len(main_dirs)-1)) for i in range(len(main_dirs))]
+Data Acquisition: A high-resolution Digital Elevation Model (DEM) of the Aso Caldera was used as the primary data source.
 
-def directional_pie_with_legend(labels, values, colors, filename=None, dpi=600, font_size=18):
-    N = len(values)
-    theta = np.linspace(0.0, 2 * np.pi, N, endpoint=False)
-    width = 2 * np.pi / N
+Slope Analysis: The DEM was processed to create a slope map, with values representing the angle of the terrain in degrees.
 
-    fig, ax = plt.subplots(figsize=(8,8), subplot_kw={'projection': 'polar'})
-    bars = ax.bar(theta, values, width=width*0.95, color=colors, edgecolor='black', align='edge')
+Visualization: The slope map was then stylized to clearly differentiate areas with varying degrees of steepness, with a particular focus on highlighting the most susceptible zones.
 
-    # Configure axis
-    ax.set_yticklabels([])
-    ax.set_xticks(theta)
-    ax.set_xticklabels(labels, fontsize=18, fontweight='bold')
+The final visualization serves as an initial assessment of vulnerable terrain, providing a valuable tool for researchers, local authorities, and residents to understand and prepare for potential geological hazards.
 
-    # Draw circular boundary and grid
-    ax.spines['polar'].set_visible(True)
-    ax.spines['polar'].set_linewidth(1.5)
-    ax.grid(True, linestyle='--', alpha=0.5)
+**Contributing**
+This project is open-source. Feel free to fork the repository, refine the methodology, or apply a similar approach to a different region.
 
-
-    # Add legend below chart with directions and FR values
-    legend_labels = [f"{lbl}: {val:.2f}" for lbl, val in zip(labels, values)]
-    legend = ax.legend(bars, legend_labels, loc='upper center', bbox_to_anchor=(0.5, -0.1),
-                fontsize=18, frameon=False, ncol=4, title="Aspect values")
-    legend.get_title().set_fontweight('bold')
-
-    plt.tight_layout()
-
-    # Save if filename specified
-    if filename:
-        plt.savefig(filename, format='tiff', dpi=dpi, bbox_inches='tight')
-
-    plt.show()
-
-# Run the plot with main directions, values, and colors
-directional_pie_with_legend(main_dirs, fr_values, aspect_colors, filename='aspect_dir_pie.tif', font_size=14)
+**Contact**
+For questions or collaborations, please open an issue on this repository.
